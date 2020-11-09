@@ -8,9 +8,9 @@ exports.handler = async(event, context) => {
     var data = Buffer.from(event.PayloadData, 'base64');
     console.log('Data =', data);
 
-    var params = decode(data);
+    var params = decode(data,event);
     
-    function decode(bytes) {
+    function decode(bytes,event) {
         var exti = bytes[8] & 0x01 ? "TRUE" : "FALSE"; //
         return {
 
@@ -35,6 +35,8 @@ exports.handler = async(event, context) => {
             Probe_Temp: {
                 "1": ((((bytes[7] << 24) >> 16) | bytes[8]) / 100).toFixed(2),
             }[bytes[6] & 0xff],
+            
+            DevEUI: event.Metadata.LoRaWAN.DevEUI,
 
         };
     }
