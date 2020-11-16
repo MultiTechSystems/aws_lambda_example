@@ -1,7 +1,7 @@
 var AWS = require('aws-sdk');
 console.log('Loading function');
 
-exports.handler = async(event, context) => {
+exports.handler = (event, context) => {
     //console.log('Received event:', JSON.stringify(event, null, 2));
     console.log('PayloadData =', event.PayloadData);
 
@@ -37,11 +37,12 @@ exports.handler = async(event, context) => {
             }[bytes[6] & 0xff],
             
             DevEUI: event.Metadata.LoRaWAN.DevEUI,
+            Timestamp: event.Metadata.LoRaWAN.Timestamp,
 
         };
     }
-    console.log(params.temperature);
-    var iotdata = new AWS.IotData({ endpoint: 'xxxxxxxxxxxx.iot.us-east-1.amazonaws.com' });
+    console.log(params.Alert_Temp);
+    var iotdata = new AWS.IotData({ endpoint: 'XXXXXX-ats.iot.us-east-1.amazonaws.com' });
     
     
    var response = {
@@ -51,13 +52,13 @@ exports.handler = async(event, context) => {
         qos: 0
     };
 
-    return iotdata.publish(response, function(err, data) {
+    iotdata.publish(response, function(err, data) {
         if (err) {
             console.log("ERROR => " + JSON.stringify(err));
         }
         else {
             console.log("Success");
         }
-    }).promise();
-    
+    });
+
 };
