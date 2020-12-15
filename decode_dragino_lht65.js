@@ -36,18 +36,18 @@ exports.handler = (event, context) => {
                 "1": ((((bytes[7] << 24) >> 16) | bytes[8]) / 100).toFixed(2),
             }[bytes[6] & 0xff],
             
-            DevEUI: event.Metadata.LoRaWAN.DevEUI,
-            Timestamp: event.Metadata.LoRaWAN.Timestamp,
+            DevEUI: event.WirelessMetadata.LoRaWAN.DevEui,
+            Timestamp: event.WirelessMetadata.LoRaWAN.Timestamp,
 
         };
     }
     console.log(params.Alert_Temp);
-    var iotdata = new AWS.IotData({ endpoint: 'XXXXXX-ats.iot.us-east-1.amazonaws.com' });
+    var iotdata = new AWS.IotData({ endpoint: 'xxxxxxxxxxxxxx-ats.iot.us-east-1.amazonaws.com' });
     
     
    var response = {
         
-        topic: event.Metadata.LoRaWAN.DevEUI.concat("/project/sensor/decoded"),
+        topic: event.WirelessMetadata.LoRaWAN.DevEui.concat("/project/sensor/decoded"),
         payload: JSON.stringify(params),
         qos: 0
     };
